@@ -2,9 +2,13 @@ package tfc.shaderutiltest.tile;
 
 import net.minecraft.util.StringIdentifiable;
 
-public enum EnumDistortion implements StringIdentifiable {
+public enum EnumShader implements StringIdentifiable {
 	NONE,
 	BETWEENLANDS,
+	GRAYSCALE,
+	DEPTH,
+	GBRA,
+	FLIP,
 //	SURROUND,
 //	BEHIND,
 	;

@@ -24,13 +24,14 @@ import java.util.Optional;
 public class DistortionBuffer {
 	private final Framebuffer main = new SimpleFramebuffer(10, 10, true, MinecraftClient.IS_SYSTEM_MAC);
 	private final Framebuffer swap = new SimpleFramebuffer(10, 10, true, MinecraftClient.IS_SYSTEM_MAC);
+	// TODO: reduce count of framebuffers used
 	private final Framebuffer dst = new SimpleFramebuffer(10, 10, true, MinecraftClient.IS_SYSTEM_MAC);
 //	private final Framebuffer dst = main;
 	
 	private PostProcessShader blur;
 	private PostProcessShader blit;
 	
-	public static PostProcessShader distort;
+	public PostProcessShader distort;
 	
 	public void updateFBOSize(int framebufferWidth, int framebufferHeight) {
 		if (framebufferHeight > 0 && framebufferWidth > 0) {
@@ -52,7 +53,7 @@ public class DistortionBuffer {
 		MinecraftClient.getInstance().getFramebuffer().beginWrite(true);
 	}
 	
-	private static void drawBuffer(PostProcessShader pshader, Framebuffer fbo, int width, int height, boolean disableBlend) {
+	protected void drawBuffer(PostProcessShader pshader, Framebuffer fbo, int width, int height, boolean disableBlend) {
 		RenderSystem.assertThread(RenderSystem::isOnRenderThread);
 		GlStateManager._colorMask(true, true, true, false);
 		GlStateManager._disableDepthTest();
@@ -100,8 +101,8 @@ public class DistortionBuffer {
 	public void finishFrame() {
 		swap.setClearColor(0, 0, 0, 0);
 		swap.clear(MinecraftClient.IS_SYSTEM_MAC);
-//		dst.setClearColor(0, 0, 0, 0);
-//		dst.clear(MinecraftClient.IS_SYSTEM_MAC);
+		dst.setClearColor(0, 0, 0, 0);
+		dst.clear(MinecraftClient.IS_SYSTEM_MAC);
 
 //		FBOBinder binder = new FBOBinder();
 		if (blur != null) {
